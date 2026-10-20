@@ -17,3 +17,14 @@ footer{border-top:1px solid #27314c;display:flex;justify-content:space-between;g
 @media(max-width:680px){.app{padding:0 13px}.top{height:70px}.top-right{font-size:9px}.brand strong{font-size:20px}.brand-mark{height:40px;width:41px;line-height:37px;font-size:27px}.section-title{margin:24px 0 13px}.pilot-tag{font-size:8px}.hud{padding:10px 7px}.hud-stat{min-width:auto}.hud-stat small{font-size:8px}.hud-stat strong{font-size:15px}.game-bottom{padding:0 9px;font-size:8px}#arena{height:min(68vh,520px);min-height:360px}.controls>div{font-size:8px}.controls button{min-width:69px;padding:9px;font-size:19px}.controls button span{display:none}.upgrade-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.upgrade{padding:11px 9px}.upgrade-title{font-size:15px}.upgrade-desc{min-height:30px}.upgrade-icon{margin-bottom:8px}.armory h2{font-size:35px}.wallet{font-size:9px;padding:10px}.overlay-hex{font-size:64px}.overlay h2{font-size:52px}.overlay p{font-size:12px}footer span:nth-child(2){display:none}}
 @media(max-width:370px){.top-right{letter-spacing:0}.upgrade-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.overlay h2{font-size:45px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* R1 curated local level portals; existing Level 1 remains the default. */
+.portal-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px;background:#102338;border:1px solid #33556d;border-radius:8px;margin:22px 0 0}
+.portal-strip>div:first-child{display:grid;gap:4px}.portal-strip strong{font:800 15px 'Barlow Condensed',sans-serif;letter-spacing:1px}
+.portal-strip small{color:#88f3d8;font:10px 'DM Mono',monospace;letter-spacing:1px}
+.portal-strip .career{font:10px 'DM Mono',monospace;color:#93aabd}
+.portal-strip .career strong{display:block;color:#f3faff;font-size:20px}
+.portal-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#6af9d3;color:#081d26;border-radius:5px;padding:12px 18px;min-height:45px;font:800 14px 'Barlow Condensed',sans-serif;letter-spacing:1px;white-space:nowrap}
+.portal-link:hover,.portal-link:focus-visible{background:#c0fff0;outline:2px solid #c0fff0;outline-offset:2px}
+.level-two .portal-strip{border-color:#f9aa68}.level-two .portal-link{background:#ffc477}
+@media(max-width:580px){.portal-strip{gap:10px}.portal-link{width:100%}.portal-strip .career strong{font-size:17px}}
