@@ -26,5 +26,6 @@ footer{border-top:1px solid #27314c;display:flex;justify-content:space-between;g
 .portal-strip .career strong{display:block;color:#f3faff;font-size:20px}
 .portal-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#6af9d3;color:#081d26;border-radius:5px;padding:12px 18px;min-height:45px;font:800 14px 'Barlow Condensed',sans-serif;letter-spacing:1px;white-space:nowrap}
 .portal-link:hover,.portal-link:focus-visible{background:#c0fff0;outline:2px solid #c0fff0;outline-offset:2px}
+.lab-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#ffca82;border:1px solid #be855e;background:#332337;border-radius:5px;padding:12px 15px;min-height:45px;font:800 14px "Barlow Condensed",sans-serif;letter-spacing:1px;white-space:nowrap}.lab-link:hover,.lab-link:focus-visible{border-color:#ffe1ad;background:#453146;outline:2px solid #ffe1ad;outline-offset:2px}
 .level-two .portal-strip{border-color:#f9aa68}.level-two .portal-link{background:#ffc477}
-@media(max-width:580px){.portal-strip{gap:10px}.portal-link{width:100%}.portal-strip .career strong{font-size:17px}}
+@media(max-width:580px){.portal-strip{gap:10px}.portal-link,.lab-link{width:100%}.portal-strip .career strong{font-size:17px}}

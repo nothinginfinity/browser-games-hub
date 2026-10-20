@@ -1,0 +1,51 @@
+name: R2 Attacker Lab isolated preview
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    # Do not run secret-bearing deployment for forks or other branches.
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt/r2-attacker-lab-slice-a')
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require preview deploy credentials
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+      - name: Run full checks
+        run: |
+          npm install --no-audit --no-fund
+          npm run check
+          npm test
+      - name: Deploy isolated R2 preview Worker
+        run: npx wrangler deploy --name neon-lanes-r2-preview
+      - name: Verify preview health, R2 route, and candidate assets
+        run: |
+          set -euo pipefail
+          BASE=https://neon-lanes-r2-preview.jaredtechfit.workers.dev
+          for i in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --location --max-time 12 "$BASE/api/health" > /tmp/r2-health.json && grep -q '"ok":true' /tmp/r2-health.json; then break; fi
+            if [ "$i" -eq 5 ]; then echo "Preview health check failed"; exit 1; fi
+            sleep 6
+          done
+          curl --fail --silent --show-error --location "$BASE/attacker-lab/" -o /tmp/r2-lab.html
+          grep -q 'NEON LANES // Attacker Lab' /tmp/r2-lab.html
+          curl --fail --silent --show-error --location "$BASE/attacker.js" -o /tmp/r2-sim.js
+          grep -q 'AttackerLabR2A' /tmp/r2-sim.js
+          curl --fail --silent --show-error --location "$BASE/attacker-lab/main.js" -o /tmp/r2-main.js
+          grep -q 'dispatchAttack' /tmp/r2-main.js
+          curl --fail --silent --show-error --location "$BASE/" -o /tmp/r2-level1.html
+          grep -q 'href="/attacker-lab/"' /tmp/r2-level1.html
+          echo "Preview health, R2 route, JS assets and R1 navigation smoke PASS"
