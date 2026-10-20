@@ -55,6 +55,22 @@ test('same seed and ordered legal commands replay identical outcomes',()=>{
  assert.deepEqual(attackSummary(replay),attackSummary(m));
  assert.deepEqual(exportAttackPlan(replay),plan);
 });
+test('balance guardrail: sustained bruiser siege can win while a raider-only rush loses',()=>{
+ const play=(type)=>{
+  const m=createAttackMatch(271828);beginAttack(m);
+  for(let tickNumber=0;tickNumber<ATTACK_RULES.roundTicks&&m.phase==='running';tickNumber++){
+   dispatchAttack(m,type,(tickNumber+(type==='tank'?2:1))%3);
+   stepAttack(m);
+  }
+  return m;
+ };
+ const heavy=play('tank'),light=play('fast');
+ assert.equal(heavy.outcome,'attacker');
+ assert.equal(heavy.defender.health,0);
+ assert.equal(light.outcome,'defender');
+ assert.ok(light.defender.health>0);
+ assert.deepEqual(attackSummary(replayAttackPlan(exportAttackPlan(heavy))),attackSummary(heavy));
+});
 test('forged plan and overspending reject rather than create a winning replay',()=>{
  const base=createAttackMatch(2);beginAttack(base);
  const p=exportAttackPlan(base);
