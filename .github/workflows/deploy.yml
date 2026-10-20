@@ -1,10 +1,13 @@
 name: Deploy Neon Lanes to Cloudflare
+
 on:
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -34,3 +37,16 @@ jobs:
       - name: Deploy Workers and Static Assets
         if: steps.auth.outputs.ready == 'true'
         run: npm run deploy
+      - name: Verify production health and game page
+        if: steps.auth.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5; do
+            code=$(curl --silent --show-error --location --max-time 12 -o /tmp/neon-health.json -w '%{http_code}' https://neon-lanes.jaredtechfit.workers.dev/api/health || true)
+            if [ "$code" = "200" ] && grep -q '"ok":true' /tmp/neon-health.json; then break; fi
+            if [ "$attempt" -eq 5 ]; then echo "Health probe failed: HTTP $code"; cat /tmp/neon-health.json; exit 1; fi
+            sleep 6
+          done
+          curl --fail --silent --show-error --location --max-time 15 https://neon-lanes.jaredtechfit.workers.dev/ > /tmp/neon-index.html
+          grep -q 'NEON LANES' /tmp/neon-index.html
+          echo "Production health and HTML smoke PASS."
