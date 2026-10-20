@@ -1,0 +1,36 @@
+name: Deploy Neon Lanes to Cloudflare
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check credentials
+        id: auth
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Cloudflare secrets missing; deployment safely skipped."
+          fi
+      - name: Install dependencies
+        if: steps.auth.outputs.ready == 'true'
+        run: npm install --no-audit --no-fund
+      - name: Run checks
+        if: steps.auth.outputs.ready == 'true'
+        run: npm run check && npm test
+      - name: Deploy Workers and Static Assets
+        if: steps.auth.outputs.ready == 'true'
+        run: npm run deploy
