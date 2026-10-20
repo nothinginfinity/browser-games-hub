@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#0a0b19">
+ <meta name="description" content="Neon Lanes Attacker Lab: deploy units to breach an automated core defender. Local tactical arcade game.">
+ <title>NEON LANES // Attacker Lab</title>
+ <link rel="stylesheet" href="/attacker-lab/style.css">
+</head>
+<body>
+ <div class="app">
+  <header class="site-header">
+   <a class="brand" href="/" aria-label="Return to Neon Lanes defense">
+    <span class="mark">N<span>//</span></span><span><small>NEON LANES / EXPERIMENTAL MODE</small><strong>ATTACKER <em>LAB.</em></strong></span>
+   </a>
+   <span class="local-tag">● LOCAL / UNRANKED</span>
+  </header>
+  <main>
+   <nav class="mode-nav" aria-label="Game modes"><a href="/">← CORE DEFENSE</a><span>R2 / SIEGE SIMULATOR</span><a href="/levels/002/">LEVEL 02 ↗</a></nav>
+   <div class="hero"><div><span class="eyebrow">ROLE REVERSED / THE CORE IS YOUR TARGET</span><h1>BUILD THE <em>ONSLAUGHT.</em></h1><p>Pick an enemy, pick its lane, and spend energy to overwhelm an automated defender. One round. Three lanes. Your tactics.</p></div>
+    <div class="objective"><small>WIN CONDITION</small><strong>BREAK 5 SHIELDS</strong><span>BEFORE THE 60s CLOCK EXPIRES</span></div>
+   </div>
+   <section class="board-shell" aria-label="Attacker arena">
+    <div class="hud" role="status">
+     <div class="stat"><small>TIME REMAINING</small><strong id="clock">01:00</strong></div>
+     <div class="stat"><small>CORE SHIELDS</small><strong id="shields" class="danger">♥ ♥ ♥ ♥ ♥</strong></div>
+     <div class="stat"><small>BREACHES</small><strong id="breaches">0 / 5</strong></div>
+     <div class="stat"><small>DEFENDER KILLS</small><strong id="kills">0</strong></div>
+    </div>
+    <canvas id="battlefield" role="img" aria-label="Three enemy lanes. Tap a lane to select it; use Deploy Enemy to attack."></canvas>
+    <div class="board-foot"><span><b>▲</b> ENEMY SPAWN ZONE</span><span id="phase" aria-live="polite">SYSTEM STANDBY</span><button id="pause" type="button" disabled>PAUSE Ⅱ</button></div>
+    <div id="overlay" class="overlay">
+     <div class="overlay-card"><span class="overline">R2 / EXPERIMENTAL SINGLE PLAYER</span><div class="overlay-mark">⬡</div><h2 id="overlayTitle">BECOME THE <em>ATTACKER.</em></h2><p id="overlayText">An automated turret guards five core shields. Deploy scouts, raiders and bruisers to breach the defenses before time runs out.</p>
+      <button id="start" type="button" class="launch">START ATTACK <span>↗</span></button><p class="fine">Local tactical sandbox only — no PvP or ranked authority.</p>
+     </div>
+    </div>
+   </section>
+   <section class="command-panel" aria-label="Attack controls">
+    <div class="command-head"><div><span class="eyebrow">THREAT BUDGET</span><h2>DEPLOY <em>ENEMIES.</em></h2></div><div class="resource"><small>ENERGY / 120</small><strong id="energy">65</strong></div></div>
+    <div class="meter" role="progressbar" aria-label="Attacker energy" aria-valuemin="0" aria-valuemax="120" aria-valuenow="65" id="energyMeter"><div id="energyBar"></div></div>
+    <p class="regen">⚡ +8 ENERGY / SECOND <span>·</span> UNITS HAVE THEIR OWN COOLDOWNS <span>·</span> MAX 12 ACTIVE</p>
+    <div class="eyebrow step-label">01 / CHOOSE YOUR UNIT</div>
+    <div class="unit-grid" role="group" aria-label="Enemy unit type">
+     <button type="button" class="unit selected" data-unit="basic" aria-pressed="true"><span class="unit-icon cyan">●</span><strong>SCOUT</strong><small>18 ⚡ · FAST DEPLOY</small><span class="cooldown" data-cooldown="basic">READY</span></button>
+     <button type="button" class="unit" data-unit="fast" aria-pressed="false"><span class="unit-icon pink">◆</span><strong>RAIDER</strong><small>32 ⚡ · HIGH SPEED</small><span class="cooldown" data-cooldown="fast">READY</span></button>
+     <button type="button" class="unit" data-unit="tank" aria-pressed="false"><span class="unit-icon gold">⬡</span><strong>BRUISER</strong><small>50 ⚡ · 9 HP</small><span class="cooldown" data-cooldown="tank">READY</span></button>
+    </div>
+    <div class="eyebrow step-label">02 / SELECT THE SPAWN LANE</div>
+    <div class="lanes" role="group" aria-label="Spawn lane">
+     <button type="button" data-lane="0" aria-pressed="false">LANE 01</button>
+     <button type="button" class="selected" data-lane="1" aria-pressed="true">LANE 02</button>
+     <button type="button" data-lane="2" aria-pressed="false">LANE 03</button>
+    </div>
+    <button type="button" id="deploy" class="deploy" disabled>DEPLOY SCOUT <span>→</span></button>
+    <div id="feedback" class="feedback" role="status" aria-live="polite">PRESS START ATTACK TO ENTER THE ARENA.</div>
+    <div class="telemetry">
+     <div><small>ENEMIES DEPLOYED</small><strong id="spawns">0 / 55</strong></div>
+     <div><small>ACTIVE ENEMIES</small><strong id="active">0 / 12</strong></div>
+     <div><small>DEFENDER AI</small><strong>ACTIVE / AUTO AIM</strong></div>
+    </div>
+    <div class="actions"><button id="restart" type="button">↻ NEW ATTACK</button><button id="replay" type="button" disabled>⟲ REPLAY THIS ATTACK</button></div>
+    <p class="fine">Fixed-seed simulation • Validated unit catalog • Local replay only. Attack Lab never reads or changes your Level 1/2 career progress.</p>
+   </section>
+  </main>
+  <footer><span>NEON LANES © 2026</span><span>ATTACKER LAB / R2 CANDIDATE</span><span>NO DOWNLOAD · NO LOGIN</span></footer>
+ </div>
+ <script type="module" src="/attacker-lab/main.js"></script>
+</body>
+</html>
