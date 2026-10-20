@@ -47,5 +47,5 @@ jobs:
           curl --fail --silent --show-error --location "$BASE/attacker-lab/main.js" -o /tmp/r2-main.js
           grep -q 'dispatchAttack' /tmp/r2-main.js
           curl --fail --silent --show-error --location "$BASE/" -o /tmp/r2-level1.html
-          grep -q 'ATTACKER LAB' /tmp/r2-level1.html
+          grep -q 'href="/attacker-lab/"' /tmp/r2-level1.html
           echo "Preview health, R2 route, JS assets and R1 navigation smoke PASS"
