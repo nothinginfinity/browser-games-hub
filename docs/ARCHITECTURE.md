@@ -1,15 +1,22 @@
-# Neon Lanes Architecture
+# Neon Lanes architecture
 
-## Four boundaries
-1. Simulation: public/sim.js uses seeded RNG and game state. tick(game,dt) handles waves, enemy spawning, shooting, hits, upgrades, gates, damage, score and loss. No DOM or network dependency.
-2. Presentation: public/game.js uses Canvas 2D perspective projection; controls, visual effects, HUD and local best record. It consumes events from the simulation and never independently awards scores.
-3. Assets: public/ is browser-native and plays without required backend requests.
-4. Edge: worker/index.js serves /api/health only, with Cloudflare Static Assets handling game files.
+## Source of truth
+Repository: nothinginfinity/browser-games-hub
+Primary game: Neon Lanes (first release).
 
-## Future extensibility
-Shape/enemy type definitions can become a registry independent of rendering assets, allowing WebGL/Three.js instanced meshes or sprites without replacing game mechanics. Add content as new wave and archetype data first.
+### Layers
+- `public/sim.js`: deterministic rules/physics, lane selection, procedural spawning, enemy HP, waves, scores, credits, purchases. No DOM or Canvas imports.
+- `public/game.js`: Canvas2D pseudo-3D road, polygons/spheres, effects, input, accessibility, UI, local personal best.
+- `public/index.html`, `public/style.css`: single page interface.
+- `worker/index.js`: Cloudflare Worker /api/health and Static Assets forwarding. API isolated from rules.
+- `tests/sim.test.mjs`: standalone Node.js simulations, no browser required.
 
-Multiplayer: introduce normalized input intents (move, purchase, fire) over WebSockets; a Durable Object owns one match, authoritative simulation/ticks and bounded snapshots. Clients only predict/interpolate. D1 for leaderboards/accounts where needed, KV optionally for cache. Never trust local client scores for ranked online use.
+### Expansion seams
+1. Enemy catalog: replace `spawnEnemy` type selection with versioned enemy descriptors. Keep canonical collision/health separate from draw models.
+2. New game routes: add a portal route and individual game modules without changing this game loop.
+3. Multiplayer (not implemented): Durable Object as authoritative per-room simulation; inputs as small JSON commands over authenticated WebSockets; client predicts player movement and renders server snapshots. Validate rate limits and never trust score or purchases from the browser.
+4. Persistence (not implemented): future D1 for accounts/high scores; KV cache where safe; localStorage for current solo personal best only.
+5. Monetization: not implemented; avoid pay-to-win defaults.
 
-## Limitations and privacy
-Single-player and local-authoritative. Local best scores are not anti-cheat secure. No cloud accounts, leaderboard, production deployment claim, multiplayer or mandatory tracking. Sound defaults off; anonymous play works immediately.
+### Deployment safety
+The repository contains one opt-in deployment controller (Actions if scoped secrets are present, otherwise Cloudflare Workers Builds) to prevent duplicate deploys. Validate the live URL and `/api/health` before declaring production ready.

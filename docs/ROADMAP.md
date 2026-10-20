@@ -1,29 +1,34 @@
-# Browser Games Hub Roadmap
+# Roadmap
 
-## R0 — Neon Lanes as PRIMARY launch game
-- [x] Public repository and touch-first original geometric lane shooter
-- [x] Auto fire, three lanes, wave scaling, shields, scoring and combos
-- [x] Credits, five weapon upgrades and bonus gates
-- [x] Split simulation/rendering, Cloudflare Worker and asset configuration
-- [x] Automated simulation checks and CI/deployment workflows in source
-- [ ] Verify latest main CI checks
-- [ ] Configure Cloudflare token or Workers Builds Git integration
-- [ ] Verify deployment URL, health response and assets
-- [ ] Owner iPhone gameplay acceptance and balancing
+## R0 — Browser playable (code complete, pending live acceptance)
+- [x] Instant-play responsive browser UI
+- [x] 3-lane auto-fire survival
+- [x] Colored circle, square/diamond and hexagon enemies
+- [x] 5 purchasable upgrades (power, rapid, split, pierce, blast)
+- [x] Boost gates (damage, rate, split, credits, heal)
+- [x] Combos, escalating waves, score and local personal best
+- [x] GitHub repo + Cloudflare Worker Static Assets config
+- [x] Node simulation tests and CI definition
+- [ ] Verify CI check run passed
+- [ ] Deploy and verify live Workers URL/health and browser gameplay
+- [ ] Owner accepts gameplay on iPhone
 
-## R1 — Gameplay polish
-- [ ] Bosses, enemy variations, better particles, sound and haptics
-- [ ] Balancing, level milestones, achievements, skins
-- [ ] Tutorial, accessibility and persist/resume versioned runs
+## R1 — Fun and progression
+- More enemy descriptors and boss waves; tune balancing through playtesting
+- Weapon evolution choices, persistent cosmetic unlocks, audio and haptics
+- Optional performance switch for low-end mobile devices
+- Expanded test coverage for collision edge cases and performance
 
-## R2 — Game platform
-- [ ] Hub with game catalog and per-game routes
-- [ ] Shared UI components and optional authenticated leaderboard
-- [ ] Add new games without refactoring Neon Lanes
+## R2 — Game portal
+- Add /games/:slug registry and game discovery page
+- Add more games while keeping Neon Lanes as the flagship
+- Optional authenticated leaderboards via D1
 
-## R3 — Multiplayer
-- [ ] Durable Object match owner and authoritative game ticks
-- [ ] WebSocket rooms/invites, reconnect and reconciliation
-- [ ] Security, score integrity, rate limiting and load testing
+## R3 — Multiplayer (later)
+- Durable Object rooms + secure WebSockets
+- Server-authoritative simulation and cheat-resistant submissions
+- Matchmaking, reconnect, regional latency trials, abuse controls
 
-GitHub passing checks is NOT proof of live Cloudflare deployment. Live and phone acceptance remain separate gates.
+## Source instructions
+Original AC1: msg:6c432856-73ba-4758-b457-29a07c1892ef
+Priority update: msg:033ce00a-359c-4aea-8ef9-7320b174eba7
