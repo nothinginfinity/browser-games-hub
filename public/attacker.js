@@ -22,7 +22,9 @@ export function createAttackMatch(seed=271828){
  defender.maxHealth=ATTACK_RULES.defenderShields;
  defender.nextEnemy=Infinity;defender.nextGate=Infinity;
  defender.nextShot=0.14;defender.player=ATTACK_RULES.startLane;defender.target=ATTACK_RULES.startLane;
- defender.stats.damage=1.65;defender.stats.fireRate=1.75;
+ // Training defender is deliberately less upgraded than an R1 human loadout.
+ // Baseline balance: sustained heavy attacks can breach, light rushes still lose.
+ defender.stats.damage=1;defender.stats.fireRate=0.45;
  return {schema:ATTACK_RULES.schema,seed,phase:'ready',tick:0,energy:ATTACK_RULES.startEnergy,
   defender,commands:[],lastSpawn:{basic:-10000,fast:-10000,tank:-10000},
   outcome:null,lastError:null};
