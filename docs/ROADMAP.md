@@ -14,7 +14,7 @@
 - [x] Owner confirms game works and likes it as Level 1 (2026-10-20)
 - [ ] Optional deeper iPhone balance/accessibility/performance review
 
-## R1 — Linked levels and portable progression (NEXT)
+## R1 — Linked levels and portable progression (IN REVIEW: branch chatgpt/r1-curated-level-portals; pending CI/owner acceptance)
 - [ ] Versioned LevelManifest/creator descriptors, curated level registry
 - [ ] Add second small level with independent difficulty/weapon presets
 - [ ] Explicit portal link from Level 1 to Level 2 and return/back path

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#090d20"><meta name="description" content="Neon Lanes: instant-play, arcade lane shooter. No install, just play.">
+ <link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/style.css">
+ <title>NEON LANES // Level 02 — Overdrive</title>
+</head>
+<body class="level-two">
+ <div class="app">
+  <header class="top"><div class="brand"><div class="brand-mark">N<span>//</span></div><div><div class="overline">ARCADE / 001</div><strong>NEON LANES</strong></div></div><div class="top-right"><span class="live-dot"></span> INSTANT PLAY <button id="sound" class="icon-btn" aria-label="Toggle sound">♫</button></div></header>
+  <main class="main">
+   <div class="portal-strip" aria-label="Level travel"><div><strong id="levelLabel">LEVEL 001</strong><small id="progressTrust">LOCAL / UNVERIFIED</small></div><div class="career">CAREER / <strong id="careerScore">000000</strong></div><a href="/levels/002/" id="portal" class="portal-link">PORTAL → LEVEL 02</a></div>
+   <div class="section-title"><div><div class="overline">LEVEL 02 / OVERDRIVE</div><h1>THE <em>GAUNTLET.</em></h1></div><span class="pilot-tag">PILOT // YOU</span></div>
+   <section class="game-shell" aria-label="Neon Lanes game">
+    <div class="hud">
+      <div class="hud-stat"><small>LEVEL SCORE</small><strong id="score">000000</strong></div>
+      <div class="hud-stat"><small>WAVE</small><strong id="wave">01</strong></div>
+      <div class="hud-stat"><small>SHIELD</small><strong id="health">♥ ♥ ♥ ♥ ♥</strong></div>
+      <div class="hud-stat"><small>CREDITS</small><strong id="coins">0</strong></div>
+      <button class="pause-btn" id="pause" aria-label="Pause game" title="Pause">Ⅱ</button>
+    </div>
+    <canvas id="arena" tabindex="0" aria-label="Game arena. Swipe or drag left and right to change lanes. Use arrow keys on desktop."></canvas>
+    <div class="game-bottom"><span>◉ AUTO FIRE <b>ONLINE</b></span><span id="streak">NO COMBO</span><span id="seconds">00:00</span></div>
+    <div id="banner" class="banner" aria-live="polite"></div>
+    <div id="overlay" class="overlay">
+      <div class="overlay-inner">
+        <div class="overlay-hex">⬡</div><div class="overline">SYSTEM READY / SINGLE PLAYER</div>
+        <h2 id="overlayTitle">DEFEND THE <span>CORE.</span></h2>
+        <p id="overlayDesc">Higher pressure, faster enemies, tougher armor. Carry compatible weapons and your local career score into the gauntlet.</p>
+        <div class="overlay-features"><span>◈ 3 LANES</span><span>✦ 5 UPGRADES</span><span>∞ WAVES</span></div>
+        <button id="play" class="primary-btn">INITIALIZE RUN <span>↗</span></button>
+        <small id="best">PERSONAL BEST / 000000</small>
+      </div>
+    </div>
+   </section>
+   <div class="controls"><button id="left" aria-label="Move left">← <span>LEFT</span></button><div>SWIPE / DRAG TO STEER <span>·</span> SHOOTING IS AUTOMATIC</div><button id="right" aria-label="Move right"><span>RIGHT</span> →</button></div>
+   <section class="armory"><div class="armory-head"><div><div class="overline">LIVE UPGRADES</div><h2>THE <em>ARMORY.</em></h2></div><div class="wallet">◈ <strong id="wallet">0</strong> CREDITS</div></div>
+     <div id="upgrades" class="upgrade-grid"></div>
+     <div class="tip"><span>✦</span> Destroy enemies for credits. Collect glowing gates by steering into their lane for temporary run-long boosts.</div>
+   </section>
+  </main>
+  <footer><span>NEON LANES © 2026</span><span>BUILT FOR THE BROWSER // NO DOWNLOADS</span><span>V0.1 / SOLO PROTOCOL</span></footer>
+ </div>
+ <script type="module" src="/game.js"></script>
+</body></html>

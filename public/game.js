@@ -1,7 +1,33 @@
 import {createGame,begin,tick,setLane,togglePause,purchase,upgradeCost,UPGRADES} from './sim.js';
+import {LEVELS,loadSnapshot,saveSnapshot,applyLoadout,syncProgress,enterLevel,restartLevel,createPortal,redeemPortal} from './progression.js';
 const el=id=>document.getElementById(id);
 const canvas=el('arena'),ctx=canvas.getContext('2d',{alpha:false});
-let game=createGame(),last=0,W=700,H=500,particles=[],bannerUntil=0,sound=false,audio=null;
+const levelId=location.pathname.startsWith('/levels/002')?'002':'001',level=LEVELS[levelId],destination=LEVELS[levelId==='001'?'002':'001'];
+const loaded=loadSnapshot(localStorage);
+const portalId=new URLSearchParams(location.search).get('portal');
+const handoff=portalId?redeemPortal(localStorage,portalId,levelId):null;
+let localStatus=handoff?(handoff.ok?'PORTAL RESTORED':'PORTAL INVALID / START SAFELY'):loaded.status==='invalid'?'INVALID SAVE / START SAFELY':'LOCAL / UNVERIFIED';
+// An invalid ticket cannot erase a previously valid local save.
+let progress=handoff?.ok?handoff.snapshot:loaded.snapshot;
+progress=enterLevel(progress,levelId);
+if(portalId){history.replaceState(null,'',location.pathname);if(handoff?.ok)saveSnapshot(localStorage,progress)}
+let game=createGame(),last=0,W=700,H=500,particles=[],bannerUntil=0,sound=false,audio=null,saveAt=0;
+function hydrate(restored=false){
+ game=createGame();applyLoadout(game,progress.levels,levelId);game.coins=progress.coins;
+ if(restored&&progress.levelId===levelId)game.score=progress.levelScore;
+}
+hydrate(!handoff||handoff.ok);
+function persist(){const next=syncProgress(progress,game,levelId);if(next&&saveSnapshot(localStorage,next)){progress=next;return true}return false}
+const portal=el('portal');portal.href=destination.url;portal.textContent=levelId==='001'?'PORTAL → LEVEL 02':'RETURN → LEVEL 01';
+el('levelLabel').textContent='LEVEL '+levelId+' / '+level.subtitle.toUpperCase();
+el('progressTrust').textContent=localStatus;
+portal.addEventListener('click',e=>{
+ e.preventDefault();
+ if(!persist()){notify('LOCAL SAVE UNAVAILABLE');return}
+ const ticket=createPortal(localStorage,progress,destination.id);
+ if(!ticket){notify('PORTAL UNAVAILABLE');return}
+ location.assign(destination.url+'?portal='+encodeURIComponent(ticket));
+});
 const glyph={damage:'✦',fireRate:'↯',multishot:'⋈',pierce:'➶',splash:'◎'};
 const palette={basic:'#48ceff',fast:'#ff6da9',tank:'#ffca68'};
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -24,7 +50,7 @@ function tone(freq=520,duration=.07){
  osc.connect(gain).connect(audio.destination);osc.start();osc.stop(audio.currentTime+duration)}catch{}
 }
 el('play').addEventListener('click',()=>{
- if(game.mode!=='paused'){game=createGame();particles=[]}
+ if(game.mode!=='paused'){persist();progress=restartLevel(progress,levelId);hydrate(false);particles=[];persist()}
  begin(game);el('overlay').hidden=true;canvas.focus({preventScroll:true});hud();
 });
 el('pause').addEventListener('click',()=>{
@@ -55,11 +81,11 @@ for(const [key,data] of Object.entries(UPGRADES)){
  const b=document.createElement('button');b.type='button';b.className='upgrade';
  b.setAttribute('aria-label','Buy '+data.label+' upgrade');
  b.innerHTML='<span class="upgrade-icon">'+glyph[key]+'</span><span class="upgrade-title">'+data.label+'</span><span class="upgrade-desc">'+data.desc+'</span><span class="upgrade-cost"><span class="price"></span><span class="upgrade-level"></span></span>';
- b.addEventListener('click',()=>{if(purchase(game,key)){notify(data.label+' UPGRADED');tone(860,.16);hud()}});
+ b.addEventListener('click',()=>{if(game.levels[key]>=level.caps[key])return;if(purchase(game,key)){notify(data.label+' UPGRADED');tone(860,.16);hud()}});
  el('upgrades').appendChild(b);shop[key]=b;
 }
 function hud(){
- el('score').textContent=String(game.score).padStart(6,'0');
+ el('score').textContent=String(game.score).padStart(6,'0');el('careerScore').textContent=String(progress.careerScore+Math.max(0,game.score-progress.creditedScore)).padStart(6,'0');
  el('wave').textContent=String(game.wave).padStart(2,'0');
  el('health').textContent='♥ '.repeat(game.health).trim()||'EMPTY';
  el('coins').textContent=game.coins.toLocaleString('en-US');el('wallet').textContent=game.coins.toLocaleString('en-US');
@@ -67,7 +93,7 @@ function hud(){
  const s=Math.floor(game.time);el('seconds').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
  el('pause').textContent=game.mode==='paused'?'▶':'Ⅱ';
  for(const key of Object.keys(shop)){
-  const b=shop[key],max=(key==='multishot'&&game.stats.multishot>=3)||(key==='pierce'&&game.stats.pierce>=4)||(key==='splash'&&game.stats.splash>=3);
+  const b=shop[key],max=game.levels[key]>=level.caps[key]||(key==='multishot'&&game.stats.multishot>=3)||(key==='pierce'&&game.stats.pierce>=4)||(key==='splash'&&game.stats.splash>=3);
   const cost=upgradeCost(game,key);
   b.querySelector('.price').textContent=max?'MAX':'◈ '+cost.toLocaleString('en-US');
   b.querySelector('.upgrade-level').textContent='LV '+String(game.levels[key]).padStart(2,'0');
@@ -150,9 +176,10 @@ function draw(dt){
  const vignette=ctx.createRadialGradient(W/2,H*.45,W*.1,W/2,H*.45,W*.75);vignette.addColorStop(0,'#00000000');vignette.addColorStop(1,'#020713ba');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
 }
 function frame(t){const dt=last?Math.min(.05,(t-last)/1000):0;last=t;
- if(game.mode==='running'){tick(game,dt);events()}
+ if(game.mode==='running'){tick(game,dt);events();if(t>=saveAt){persist();saveAt=t+2500}}
  if(t>=bannerUntil)el('banner').classList.remove('show');
  draw(game.mode==='running'?dt:0);hud();requestAnimationFrame(frame);
 }
-overlay('DEFEND THE <span>CORE.</span>','Move between three lanes. Your turret fires automatically. Shatter incoming shapes, collect credits, and upgrade your arsenal.','INITIALIZE RUN');
+overlay(levelId==='001'?'DEFEND THE <span>CORE.</span>':'ENTER THE <span>GAUNTLET.</span>',levelId==='001'?'Move between three lanes. Your turret fires automatically. Shatter incoming shapes, collect credits, and upgrade your arsenal.':'Level 02 ramps up enemy speed and armor. Your compatible weapons and local career score have traveled with you.','INITIALIZE RUN');
+if(handoff&&!handoff.ok)notify('PORTAL ERROR: SAFE LOCAL START');
 requestAnimationFrame(frame);
