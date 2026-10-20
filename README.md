@@ -2,6 +2,12 @@
 
 An instant-play browser shooter for phone, tablet and desktop. No download, login or app store. The first and primary game is **Neon Lanes**, an original geometric lane shooter inspired by the quick-play lane-defense genre.
 
+## Play now
+- **Level 1 (Arcade):** https://neon-lanes.jaredtechfit.workers.dev/
+- **Level 2 (Overdrive):** https://neon-lanes.jaredtechfit.workers.dev/levels/002/
+
+**R1 owner iPhone acceptance — PASS 5/5 (2026-10-20).** Both levels and their return portals were tested: career score, credits and owned weapon upgrades carry between levels, each destination starts a fresh level score, and progress survives return and refresh. The portal ticket and progress are same-origin **local/unverified**; this is not cross-creator trusted scoring or PvP. R2 Attacker Lab is next on the roadmap.
+
 ## Run locally
     npm install
     npm run dev
