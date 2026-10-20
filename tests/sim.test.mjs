@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createGame,begin,tick,spawnEnemy,spawnGate,setLane,purchase,upgradeCost,random} from '../public/sim.js';
+test('seeded runs are repeatable',()=>{const a=createGame(123),b=createGame(123);assert.deepEqual(Array.from({length:10},()=>random(a)),Array.from({length:10},()=>random(b)))});
+test('run begins and advances, pause stops simulation',()=>{const g=createGame(1);begin(g);tick(g,.04);assert.equal(g.mode,'running');assert.ok(g.time>0);g.mode='paused';const t=g.time;tick(g,.04);assert.equal(g.time,t)});
+test('lane selection is clamped',()=>{const g=createGame(1);setLane(g,20);assert.equal(g.target,2);setLane(g,-3);assert.equal(g.target,0)});
+test('an enemy reaching the core costs a shield',()=>{const g=createGame(1);begin(g);spawnEnemy(g,{lane:2,z:3.2,speed:20});tick(g,.05);assert.equal(g.health,4)});
+test('upgrades debit coins and improve player',()=>{const g=createGame(1);g.coins=200;const c=upgradeCost(g,'damage');assert.equal(purchase(g,'damage'),true);assert.equal(g.coins,200-c);assert.ok(g.stats.damage>1);assert.ok(upgradeCost(g,'damage')>c)});
+test('cannot buy with insufficient balance or exceed max multishot',()=>{const g=createGame(1);assert.equal(purchase(g,'damage'),false);g.coins=10000;purchase(g,'multishot');purchase(g,'multishot');assert.equal(g.stats.multishot,3);assert.equal(purchase(g,'multishot'),false)});
+test('collecting a gate in selected lane applies perk',()=>{const g=createGame(1);begin(g);spawnGate(g,{kind:'coins',lane:1,z:6.1});tick(g,.05);assert.equal(g.coins,85)});
+test('missing a gate does not apply bonus',()=>{const g=createGame(1);begin(g);spawnGate(g,{kind:'coins',lane:2,z:6.1});tick(g,.05);assert.equal(g.coins,0)});
+test('shots can kill enemies and pay credits',()=>{const g=createGame(1);begin(g);spawnEnemy(g,{lane:1,z:12,hp:1,speed:0});for(let i=0;i<20;i++)tick(g,.05);assert.ok(g.kills>=1);assert.ok(g.score>0);assert.ok(g.coins>0)});
+test('game over when the last shield is lost',()=>{const g=createGame(1);begin(g);g.health=1;spawnEnemy(g,{z:3.1,speed:20});tick(g,.05);assert.equal(g.mode,'over');assert.equal(g.health,0)});
