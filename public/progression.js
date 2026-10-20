@@ -1,7 +1,7 @@
 // R1 same-origin prototype progress. LOCAL/UNVERIFIED: never use for competitive authority.
 export const LEVELS=Object.freeze({
- "001":Object.freeze({id:"001",version:"1.0.0",creatorId:"browser-games-hub",title:"Neon Lanes",subtitle:"Core Defense",url:"/",difficulty:Object.freeze({enemyHealth:0,speedMultiplier:1,spawnIntervalMultiplier:1}),caps:Object.freeze({damage:32,fireRate:32,multishot:2,pierce:4,splash:3})}),
- "002":Object.freeze({id:"002",version:"1.0.0",creatorId:"browser-games-hub",title:"Neon Lanes: Overdrive",subtitle:"The Gauntlet",url:"/levels/002/",difficulty:Object.freeze({enemyHealth:2,speedMultiplier:1.18,spawnIntervalMultiplier:0.78}),caps:Object.freeze({damage:5,fireRate:6,multishot:2,pierce:2,splash:1})})
+ "001":Object.freeze({id:"001",manifestVersion:1,rulesetId:"neon-lanes-r1",scorePolicy:"per-level-reset/career-cumulative",verificationPolicy:"local-unverified",allowedItems:["damage","fireRate","multishot","pierce","splash"],version:"1.0.0",creatorId:"browser-games-hub",title:"Neon Lanes",subtitle:"Core Defense",url:"/",difficulty:Object.freeze({enemyHealth:0,speedMultiplier:1,spawnIntervalMultiplier:1}),caps:Object.freeze({damage:32,fireRate:32,multishot:2,pierce:4,splash:3})}),
+ "002":Object.freeze({id:"002",manifestVersion:1,rulesetId:"neon-lanes-r1-overdrive",scorePolicy:"per-level-reset/career-cumulative",verificationPolicy:"local-unverified",allowedItems:["damage","fireRate","multishot","pierce","splash"],version:"1.0.0",creatorId:"browser-games-hub",title:"Neon Lanes: Overdrive",subtitle:"The Gauntlet",url:"/levels/002/",difficulty:Object.freeze({enemyHealth:2,speedMultiplier:1.18,spawnIntervalMultiplier:0.78}),caps:Object.freeze({damage:5,fireRate:6,multishot:2,pierce:2,splash:1})})
 });
 export const SNAPSHOT_KEY="neon-lanes-run-snapshot-v1", PORTAL_KEY="neon-lanes-portal-v1";
 const KEYS=["damage","fireRate","multishot","pierce","splash"];

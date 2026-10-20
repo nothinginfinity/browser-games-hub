@@ -7,7 +7,8 @@ const loaded=loadSnapshot(localStorage);
 const portalId=new URLSearchParams(location.search).get('portal');
 const handoff=portalId?redeemPortal(localStorage,portalId,levelId):null;
 let localStatus=handoff?(handoff.ok?'PORTAL RESTORED':'PORTAL INVALID / START SAFELY'):loaded.status==='invalid'?'INVALID SAVE / START SAFELY':'LOCAL / UNVERIFIED';
-let progress=handoff?.ok?handoff.snapshot:handoff?null:loaded.snapshot;
+// An invalid ticket cannot erase a previously valid local save.
+let progress=handoff?.ok?handoff.snapshot:loaded.snapshot;
 progress=enterLevel(progress,levelId);
 if(portalId){history.replaceState(null,'',location.pathname);if(handoff?.ok)saveSnapshot(localStorage,progress)}
 let game=createGame(),last=0,W=700,H=500,particles=[],bannerUntil=0,sound=false,audio=null,saveAt=0;
