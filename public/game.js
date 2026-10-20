@@ -9,6 +9,7 @@ const handoff=portalId?redeemPortal(localStorage,portalId,levelId):null;
 let localStatus=handoff?(handoff.ok?'PORTAL RESTORED':'PORTAL INVALID / START SAFELY'):loaded.status==='invalid'?'INVALID SAVE / START SAFELY':'LOCAL / UNVERIFIED';
 let progress=handoff?.ok?handoff.snapshot:handoff?null:loaded.snapshot;
 progress=enterLevel(progress,levelId);
+if(portalId){history.replaceState(null,'',location.pathname);if(handoff?.ok)saveSnapshot(localStorage,progress)}
 let game=createGame(),last=0,W=700,H=500,particles=[],bannerUntil=0,sound=false,audio=null,saveAt=0;
 function hydrate(restored=false){
  game=createGame();applyLoadout(game,progress.levels,levelId);game.coins=progress.coins;

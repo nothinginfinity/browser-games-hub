@@ -48,7 +48,7 @@ export function spawnEnemy(game,custom={}) {
  const type=custom.type??(game.wave>=3&&random(game)<0.16?"tank":random(game)<0.27?"fast":"basic");
  const hp=custom.hp??Math.ceil((type==="tank"?4:type==="fast"?1:2)+(game.wave-1)*0.63+Math.max(0,Math.min(4,game.difficulty?.enemyHealth||0)));
  const enemy={id:++game.sequence,lane,z:custom.z??100,hp,maxHp:hp,type,
-  speed:custom.speed??(type==="fast"?18:type==="tank"?9:12)+Math.min(game.wave*0.55,7))*(game.difficulty?.speedMultiplier||1),hitAt:-1};
+  speed:(custom.speed??((type==="fast"?18:type==="tank"?9:12)+Math.min(game.wave*0.55,7)))*(game.difficulty?.speedMultiplier||1),hitAt:-1};
  game.enemies.push(enemy);return enemy;
 }
 export function spawnGate(game,custom={}) {
