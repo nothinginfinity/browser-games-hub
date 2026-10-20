@@ -1,6 +1,6 @@
 # Roadmap — Neon Lanes and Browser Games Hub
 
-> State recorded 2026-10-20. Level 1 is live and owner-tested ("it worked", "pretty good", appropriate Level 1). Level portals, portable score passports and attacker play are **planned**, not shipped.
+> Acceptance state (2026-10-20): R0 Level 1 and R1 curated Level 2 portals are **shipped, deployed, and owner iPhone-tested (5/5)**. Progress transfers are **same-origin and local/unverified only**. R1b trusted creator passports and R2 attacker play remain **planned**, not shipped.
 > Design decision: [ADR-0001: Level portals and attacker/defender play](ADR-0001-LEVEL-PORTALS-AND-ATTACKER-MODE.md).
 
 ## R0 — Neon Lanes, playable Level 1 (deployed and owner-tested)
@@ -14,14 +14,17 @@
 - [x] Owner confirms game works and likes it as Level 1 (2026-10-20)
 - [ ] Optional deeper iPhone balance/accessibility/performance review
 
-## R1 — Linked levels and portable progression (IN REVIEW: branch chatgpt/r1-curated-level-portals; pending CI/owner acceptance)
-- [ ] Versioned LevelManifest/creator descriptors, curated level registry
-- [ ] Add second small level with independent difficulty/weapon presets
-- [ ] Explicit portal link from Level 1 to Level 2 and return/back path
-- [ ] RunSnapshotV1: preserve career score, level score, compatible loadout and credits across *same-origin* navigation
-- [ ] Validate/cap upgrades according to destination declared rules; recover from malformed/stale snapshots
-- [ ] Label local progress as unverified; do not trust query-string scores for rankings
-- [ ] Unit and integration checks + iPhone owner acceptance
+## R1 — Linked levels and portable progression (SHIPPED; owner iPhone acceptance PASS 5/5 on 2026-10-20)
+- [x] Versioned LevelManifest descriptors and curated local level registry
+- [x] Level 2 Overdrive at `/levels/002/` with distinct difficulty and destination upgrade limits
+- [x] Explicit Level 1 → Level 2 and return portal links
+- [x] RunSnapshotV1: preserve career score, credits and owned weapons across *same-origin* navigation; reset level score on level change
+- [x] Apply destination compatibility caps without deleting owned upgrades; recover valid saved progress from malformed/stale portal tickets
+- [x] Local progress labeled unverified; score never transferred in a URL query string
+- [x] GitHub automated progression/simulation checks and owner iPhone portal/progression acceptance (5/5)
+- [x] PR #1 merged at `9520baeb46238c282de1b9d9d17f799c9c1e2cde`; validate `39445763485` and Cloudflare deploy `39445763275` succeeded
+- [x] Owner checked: Level 1 upgrade; portal to Level 2; career score/credits/owned weapons persist while level score resets; harder Level 2 and return portal; progress survives returning and refreshing
+- [ ] Optional deeper accessibility, performance and invalid/expired/replayed portal-ticket iPhone exploration (covered by automated tests, not separately owner-tested)
 
 ## R1b — Verified creator interoperability
 - [ ] ProgressionPassportV1 / one-time short-lived level handoff ticket from trusted Worker
@@ -64,4 +67,4 @@
 - Priority Level 1 game: `msg:033ce00a-359c-4aea-8ef9-7320b174eba7`
 - Owner expansion request: this conversation 2026-10-20; acceptance of initial game plus linked levels and attacker-controlled enemy deployment.
 
-Next **functional implementation** to review/build: a second curated mini-level + same-origin score-carrying portal, then attacker lab. Do not deploy these roadmap ideas until separately implemented and tested.
+Next **functional implementation**: R2 Attacker Lab, built and reviewed separately from the accepted R1 levels. Begin with budget-limited attacker-controlled enemy deployment against a deterministic AI/recorded defender; add asynchronous challenges and live PvP only in later gated milestones. Do not conflate local-unverified progress with trusted competitive scoring.
