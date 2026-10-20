@@ -34,13 +34,14 @@
 - [ ] Signed/versioned creator manifests, compatible weapon item descriptors, transparent item conversion
 - [ ] Consentful progress sharing and recovery; end-to-end cross-origin test before claiming interop
 
-## R2 — Attacker Lab (new core game mode)
-- [ ] Attacker can choose and deploy colored enemy types/formations/lanes
-- [ ] Resource budget, spawn cooldowns, active enemy caps and limited round length
-- [ ] Deterministic command rules/replay seeds shared with the defender simulation
-- [ ] AI/recorded defender target; both sides have explicit win conditions
-- [ ] Enemy descriptors and weapon/effect catalog support creator expansions
-- [ ] Balance telemetry and tests for illegal spawns/exploits
+## R2 — Attacker Lab (SLICE A CANDIDATE: branch chatgpt/r2-attacker-lab-slice-a, NOT MERGED / NOT DEPLOYED)
+- [x] Candidate: standalone `/attacker-lab/` local attacker role with selection of three colored enemy types and three target lanes
+- [x] Candidate: finite energy/refill, unit cooldowns, active enemy cap, spawn quota and 60-second match
+- [x] Candidate: deterministic fixed-step command rules, seed and local replay (shares the R1 defender combat engine)
+- [x] Candidate: auto-targeting defender, explicit attacker/core-breach and defender/survival victory conditions
+- [x] Candidate: fixed validated scout/raider/bruiser descriptors; separate local counters and invalid/overspending command tests
+- [ ] Independent review, CI, live route/asset smoke and owner iPhone acceptance before marking shipped
+- [ ] Formation editor, balance tuning/telemetry depth, content extension and replay-export UX remain subsequent R2 work
 
 ## R2b — Creator attack challenges / asynchronous competition
 - [ ] Build/publish immutable attack plans and share challenge links
